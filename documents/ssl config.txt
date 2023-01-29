@@ -1,0 +1,49 @@
+
+Choco installation
+
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+C:\Users\HAMIDG~1\AppData\Local\Temp\OfficeAddins.log.txt
+
+mkcert installation and generation
+https://kags.me.ke/post/office-add-in-mkcert-localhost-ssl-certificate/
+
+choco install mkcert
+mkcert -ecdsa
+rm $(mkcert -CAROOT)
+mkcert -install
+mkcert -cert-file server.crt -key-file server.key local.dev localhost 127.0.0.1 ::1
+
+juanbl@microsoft.com
+
+certutil.exe -generateSSTFromWU roots.sst
+Get-ChildItem cert:\LocalMachine\root | Where {$_.NotAfter -lt (Get-Date).AddDays(40)}
+
+Get-ChildItem Cert:\LocalMachine\My | Where-Object { $_.Subject -match 'localhost' } | Remove-Item
+Get-ChildItem Cert:\LocalMachine\My\BF59B66D9D2431CE03B44E31FA6A1B64C315A731 | Remove-Item
+
+%LOCALAPPDATA%\Microsoft\Office\16.0\Wef\
+%userprofile%\AppData\Local\Packages\Microsoft.Win32WebViewHost_cw5n1h2txyewy\AC\#!123\INetCache\
+
+ou can rule out if it's a a gitignore issue with a few commands.
+
+Check what files are currently being ignored with:
+
+git status --ignored
+And then find what gitignore is responsible with:
+
+git check-ignore -v bin
+That last command may or may not work on windows.
+
+* global process */
+//https://graph.microsoft.com/v1.0/me/drive/recent?select=id,name,file/mimetype
+//https://graph.microsoft.com/v1.0/me/drive/items/01I7X2Q5T2I6GFX6M5IJG3FD4DGK4THKSG?expand=thumbnails&select=id,name,size,webUrl,folder,@content.downloadUrl
+//https://graph.microsoft.com/v1.0/me/drive/items/01I7X2Q5X6K2V3OAWIIFGI4I6HWSVLBQCG?expand=thumbnails&select=id,name,folder,@content.downloadUrl
+
+
+$cert = New-SelfSignedCertificate -DnsName @("mydev.local", "localhost", "127.0.0.1", "::1") -CertStoreLocation "cert:\LocalMachine\My"
+
+$certKeyPath = "c:\certs\contoso.com.pfx"
+$password = ConvertTo-SecureString 'password' -AsPlainText -Force
+$cert | Export-PfxCertificate -FilePath $certKeyPath -Password $password
+$rootCert = $(Import-PfxCertificate -FilePath $certKeyP
